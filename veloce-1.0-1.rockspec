@@ -28,8 +28,16 @@ dependencies = {
 
 build = {
     type = "builtin",
+
     modules = {
         ["veloce"] = "veloce/init.lua",
-        ["veloce.veloce"] = "veloce/veloce.lua"
+        ["veloce.veloce"] = "veloce/veloce.lua",
+
+        ["veloce.core.aplication"] = "veloce/core/aplication.lua",
+        ["veloce.core.functions"] = "veloce/core/functions.lua",
+
+        ["veloce.utils.json"] = "veloce/utils/json.lua",
+        ["veloce.utils.path"] = "veloce/utils/path.lua",
+        ["veloce.utils.status"] = "veloce/utils/status.lua"
     }
 }
