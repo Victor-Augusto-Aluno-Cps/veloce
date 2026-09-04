@@ -1,9 +1,9 @@
 package = "veloce"
-version = "1.0-1"
+version = "1.0-2"
 
 source = {
     url = "git+https://github.com/Victor-Augusto-Aluno-Cps/veloce.git",
-    tag = "v1.0.0"
+    tag = "v1.0.1"
 }
 
 description = {
