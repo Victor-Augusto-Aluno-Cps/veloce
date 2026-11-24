@@ -23,7 +23,8 @@ web applications and backend services with Lua.
 
 dependencies = {
     "lua >= 5.1",
-    "luasocket >= 3.0"
+    "luasocket >= 3.0",
+    "lanes >= 3.16"
 }
 
 build = {
@@ -35,6 +36,7 @@ build = {
 
         ["veloce.core.aplication"] = "veloce/core/aplication.lua",
         ["veloce.core.functions"] = "veloce/core/functions.lua",
+        ["veloce.core.server"] = "veloce/core/server.lua",
 
         ["veloce.utils.json"] = "veloce/utils/json.lua",
         ["veloce.utils.path"] = "veloce/utils/path.lua",

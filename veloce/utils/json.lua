@@ -1,14 +1,20 @@
 local json = {}
 
+local controlEscapes = {
+    ["\b"] = "\\b",
+    ["\f"] = "\\f",
+    ["\n"] = "\\n",
+    ["\r"] = "\\r",
+    ["\t"] = "\\t"
+}
+
 local function escapeString(value)
     return value
         :gsub("\\", "\\\\")
         :gsub('"', '\\"')
-        :gsub("\b", "\\b")
-        :gsub("\f", "\\f")
-        :gsub("\n", "\\n")
-        :gsub("\r", "\\r")
-        :gsub("\t", "\\t")
+        :gsub("[%z\1-\31]", function(char)
+            return controlEscapes[char] or ("\\u%04x"):format(char:byte())
+        end)
 end
 
 local function isArray(value)
@@ -180,6 +186,10 @@ function json.decode(input)
                 end
 
             else
+                if char:byte() < 0x20 then
+                    error("Unescaped control character in JSON string")
+                end
+
                 result[#result + 1] = char
                 position = position + 1
             end
@@ -190,16 +200,53 @@ function json.decode(input)
 
     local function parseNumber()
         local start = position
+        local char = input:sub(position, position)
 
-        local pattern = "^%-?%d+%.?%d*[eE]?[+-]?%d*"
-
-        local number = input:sub(position):match(pattern)
-
-        if not number or number == "" then
-            error("Invalid JSON number at position " .. position)
+        if char == "-" then
+            position = position + 1
         end
 
-        position = position + #number
+        char = input:sub(position, position)
+        if char == "0" then
+            position = position + 1
+            if input:sub(position, position):match("%d") then
+                error("Invalid JSON number at position " .. start)
+            end
+        elseif char:match("[1-9]") then
+            repeat
+                position = position + 1
+                char = input:sub(position, position)
+            until not char:match("%d")
+        else
+            error("Invalid JSON number at position " .. start)
+        end
+
+        if input:sub(position, position) == "." then
+            position = position + 1
+            if not input:sub(position, position):match("%d") then
+                error("Invalid JSON number at position " .. start)
+            end
+            repeat
+                position = position + 1
+            until not input:sub(position, position):match("%d")
+        end
+
+        char = input:sub(position, position)
+        if char == "e" or char == "E" then
+            position = position + 1
+            char = input:sub(position, position)
+            if char == "+" or char == "-" then
+                position = position + 1
+            end
+            if not input:sub(position, position):match("%d") then
+                error("Invalid JSON number at position " .. start)
+            end
+            repeat
+                position = position + 1
+            until not input:sub(position, position):match("%d")
+        end
+
+        local number = input:sub(start, position - 1)
 
         local value = tonumber(number)
 

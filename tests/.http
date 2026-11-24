@@ -1,0 +1,45 @@
+GET http://localhost:3000/rota/com/barra/
+
+###
+
+GET http://localhost:3000/json
+
+###
+
+GET http://localhost:3000/search?q=lua+threads&tag=fast&tag=small
+
+###
+
+GET http://localhost:3000/rota/com/barra/
+
+###
+
+GET http://localhost:3000/header
+X-Test: from-http-client
+
+###
+
+POST http://localhost:3000/echo
+Content-Type: application/json
+
+{"message":"echo"}
+
+###
+
+GET http://localhost:3000/redireciona
+
+###
+
+GET http://localhost:3000/redireciona-301
+
+###
+
+GET http://localhost:3000/quebra
+
+###
+
+GET http://localhost:3000/sem-resposta
+
+###
+
+GET http://localhost:3000/status-desconhecidorota/com/barra/

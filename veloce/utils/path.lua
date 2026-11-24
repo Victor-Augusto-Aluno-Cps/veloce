@@ -6,7 +6,7 @@ function path.decodeUrl(str)
     end
 
     str = tostring(str)
-    str = str:gsub("+", " ")
+    str = str:gsub("%+", " ")
     str = str:gsub("%%(%x%x)", function(hex)
         return string.char(tonumber(hex, 16))
     end)
@@ -15,6 +15,14 @@ function path.decodeUrl(str)
 end
 
 function path.findRoute(app, req)
+    local routeLookup = app._routeLookup and app._routeLookup[req.method]
+    if routeLookup then
+        local route = routeLookup[path.normalize(req.path)]
+        if route then
+            return route
+        end
+    end
+
     local routes = app._routes[req.method]
 
     if not routes then

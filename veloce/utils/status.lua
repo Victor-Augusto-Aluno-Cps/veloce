@@ -71,7 +71,7 @@ local statusMessages = {
 local status_ = {}
 
 function status_.code(code)
-    return statusMessages[tonumber(code)]
+    return statusMessages[tonumber(code)] or "Unknown Status"
 end
 
 

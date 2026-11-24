@@ -34,13 +34,22 @@ function functions.exe(stack, req, res)
         if not ok then
             ended = true
 
+            io.stderr:write("Veloce handler error:\n", tostring(err), "\n")
+
             if not res.finished then
                 res.status(500)
                 res.send("Internal Server Error")
             end
 
             if res.onError then
-                pcall(res.onError, err)
+                local callbackOk, callbackErr = pcall(res.onError, err)
+                if not callbackOk then
+                    io.stderr:write(
+                        "Veloce error callback failed:\n",
+                        tostring(callbackErr),
+                        "\n"
+                    )
+                end
             end
         end
     end

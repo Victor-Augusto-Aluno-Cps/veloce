@@ -8,7 +8,9 @@ app.use(function(req, res, next)
 end)
 
 app.get("/", function(req, res)
-    return res.status(500)
+    return res.status(200).json({
+        message = "teste"
+    })
 end)
 
 app.get("/json", function(req, res)
